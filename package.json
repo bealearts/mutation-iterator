@@ -1,12 +1,12 @@
 {
   "name": "mutation-iterator",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "",
   "main": "src/mutation-iterator.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node src/mutation-iterator.test.js"
   },
-  "author": "",
+  "author": "David Beale",
   "license": "MIT"
 }

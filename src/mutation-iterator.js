@@ -1,3 +1,5 @@
+const finishSymbol = Symbol('end');
+
 export default function mutationIterator(target = {}) {
   let change;
   let emit = () => null;
@@ -26,7 +28,7 @@ export default function mutationIterator(target = {}) {
         }
       }
 
-      if (prop === 'finish') {
+      if (prop === finishSymbol) {
         return () => emit(true);
       }
 
@@ -37,4 +39,9 @@ export default function mutationIterator(target = {}) {
   watch();
 
   return result;
+}
+
+
+export function finish(iterator) {
+  iterator[finishSymbol]();
 }

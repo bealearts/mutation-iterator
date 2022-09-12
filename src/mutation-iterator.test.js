@@ -1,6 +1,6 @@
 import { strict as assert } from 'assert';
 
-import mutationIterator from './mutation-iterator.js';
+import mutationIterator, { finish } from './mutation-iterator.js';
 
 test('Allows setting props', async () => {
   const obj = mutationIterator();
@@ -15,7 +15,7 @@ test('Yields the initial object', async () => {
   obj.name = 'test';
 
   setTimeout(() => {
-    obj.finish();
+    finish(obj);
   }, 100);
 
   let last;
@@ -32,7 +32,7 @@ test('Yields a mutated object', async () => {
 
   setTimeout(() => {
     obj.name = 'change';
-    Promise.resolve().then(() => obj.finish());
+    Promise.resolve().then(() => finish(obj));
   }, 100);
 
   let last;
@@ -53,7 +53,7 @@ test('Batches changes', async () => {
   setTimeout(() => {
     obj.name = 'change';
     obj.name = 'changed again';
-    Promise.resolve().then(() => obj.finish());
+    Promise.resolve().then(() => finish(obj));
   }, 100);
 
   let last;
@@ -68,6 +68,48 @@ test('Batches changes', async () => {
   assert.equal(count, 2);
 });
 
+test('Extends a target object', async () => {
+  const target = {
+    existing: 10
+  };
+  const obj = mutationIterator(target);
+  obj.existing += 1;
+
+  setTimeout(() => {
+    finish(obj);
+  }, 100);
+
+  let last;
+  for await (const { existing } of obj) {
+    last = existing;
+  }
+
+  assert.equal(last, 11);
+});
+
+test('Yields a mutated nested object', async () => {
+  const obj = mutationIterator();
+  obj.nested = {};
+
+  setTimeout(() => {
+    obj.nested = {
+      name: 'change'
+    };
+    Promise.resolve().then(() => finish(obj));
+  }, 100);
+
+  let last;
+  let count = 0;
+  for await (const { nested } of obj) {
+    last = nested;
+    count++;
+  }
+
+  assert.deepEqual(last, {
+    name: 'change'
+  });
+  assert.equal(count, 2);
+});
 
 async function test(name, func) {
   console.info(name); // eslint-disable-line
