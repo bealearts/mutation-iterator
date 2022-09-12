@@ -5,8 +5,11 @@
   "main": "src/mutation-iterator.js",
   "type": "module",
   "scripts": {
-    "test": "node src/mutation-iterator.test.js"
+    "test": "vitest"
   },
   "author": "David Beale",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "vitest": "^0.23.2"
+  }
 }

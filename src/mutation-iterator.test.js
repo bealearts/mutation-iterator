@@ -1,11 +1,11 @@
-import { strict as assert } from 'assert';
+import { test, expect } from 'vitest';
 
 import mutationIterator, { finish } from './mutation-iterator.js';
 
 test('Allows setting props', async () => {
   const obj = mutationIterator();
   obj.name = 'test';
-  assert.deepEqual(obj, {
+  expect(obj).toEqual({
     name: 'test'
   });
 });
@@ -23,7 +23,7 @@ test('Yields the initial object', async () => {
     last = name;
   }
 
-  assert.equal(last, 'test');
+  expect(last).toEqual('test');
 });
 
 test('Yields a mutated object', async () => {
@@ -42,8 +42,8 @@ test('Yields a mutated object', async () => {
     count++;
   }
 
-  assert.equal(last, 'change');
-  assert.equal(count, 2);
+  expect(last).toEqual('change');
+  expect(count).toEqual(2);
 });
 
 test('Batches changes', async () => {
@@ -64,8 +64,8 @@ test('Batches changes', async () => {
     count++;
   }
 
-  assert.equal(last, 'changed again');
-  assert.equal(count, 2);
+  expect(last).toEqual('changed again');
+  expect(count).toEqual(2);
 });
 
 test('Extends a target object', async () => {
@@ -84,7 +84,7 @@ test('Extends a target object', async () => {
     last = existing;
   }
 
-  assert.equal(last, 11);
+  expect(last).toEqual(11);
 });
 
 test('Yields a mutated nested object', async () => {
@@ -105,13 +105,8 @@ test('Yields a mutated nested object', async () => {
     count++;
   }
 
-  assert.deepEqual(last, {
+  expect(last).toEqual({
     name: 'change'
   });
-  assert.equal(count, 2);
+  expect(count).toEqual(2);
 });
-
-async function test(name, func) {
-  console.info(name); // eslint-disable-line
-  await func();
-}
