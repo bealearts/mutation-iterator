@@ -10,14 +10,24 @@ npm i mutation-iterator
 # Usage
 
 ```js
-import mutationIterator from 'mutation-iterator';
+import mutationIterator, { finish } from 'mutation-iterator';
 
 const obj = mutationIterator();
 
+obj.someProp = 'Initial...';
+
+setTimeout(() => {
+  obj.someProp = 'Hello'
+
+  finish(obj);
+}, 1000);
 
 
-for await ( { name } of obj ) {
-  console.log(name);
+console.log(obj.someProp);
+
+for await ( const { someProp } of obj ) {
+  console.log(someProp);
 }
 
+console.log('Finished');
 ```

@@ -1,11 +1,11 @@
 const finishSymbol = Symbol('end');
 
 export default function mutationIterator(targetObj = {}) {
-  let change;
+  let watcher;
   let emitChange = () => null;
 
   function watch() {
-    change = new Promise((resolve) => {
+    watcher = new Promise((resolve) => {
       emitChange = resolve;
     });
   }
@@ -22,7 +22,7 @@ export default function mutationIterator(targetObj = {}) {
       if (prop === Symbol.asyncIterator) {
         return async function* iterator() {
           while (true) {
-            const shouldTerminate = !await change; // eslint-disable-line no-await-in-loop
+            const shouldTerminate = !await watcher; // eslint-disable-line no-await-in-loop
             if (shouldTerminate) return target;
             yield target;
           }
