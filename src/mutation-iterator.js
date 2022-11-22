@@ -1,6 +1,6 @@
 const finishSymbol = Symbol('end');
 
-export default function mutationIterator(target = {}) {
+export default function mutationIterator(targetObj = {}) {
   let change;
   let emit = () => null;
 
@@ -10,22 +10,22 @@ export default function mutationIterator(target = {}) {
     });
   }
 
-  const result = new Proxy(target, {
+  const result = new Proxy(targetObj, {
     set(target, prop, value) {
-      target[prop] = value;
+      target[prop] = value; // eslint-disable-line no-param-reassign
       emit();
       return true;
     },
 
     get(target, prop) {
       if (prop === Symbol.asyncIterator) {
-        return async function*() {
-          while(true) {
-            if ( await change ) return;
+        return async function* iterator() {
+          while (true) {
+            if (await change) return; // eslint-disable-line no-await-in-loop
             watch();
             yield target;
           }
-        }
+        };
       }
 
       if (prop === finishSymbol) {
@@ -40,7 +40,6 @@ export default function mutationIterator(target = {}) {
 
   return result;
 }
-
 
 export function finish(iterator) {
   iterator[finishSymbol]();

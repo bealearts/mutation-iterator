@@ -1,15 +1,23 @@
 {
   "name": "mutation-iterator",
   "version": "0.0.0",
-  "description": "",
+  "description": "Creates an object which is a an async iterator which yields when any of its properties are mutated",
   "main": "src/mutation-iterator.js",
   "type": "module",
   "scripts": {
-    "test": "vitest"
+    "test": "npm run lint && npm run test:unit",
+    "test:unit": "vitest --coverage",
+    "lint": "eslint src"
   },
-  "author": "David Beale",
+  "author": {
+    "name": "David Beale",
+    "url": "http://bealearts.co.uk/"
+  },
   "license": "MIT",
   "devDependencies": {
-    "vitest": "^0.23.2"
+    "@vitest/coverage-c8": "^0.25.2",
+    "eslint": "^8.23.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "vitest": "^0.25.2"
   }
 }
