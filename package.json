@@ -7,7 +7,8 @@
   "scripts": {
     "test": "npm run lint && npm run test:unit",
     "test:unit": "vitest --coverage",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "example": "node example/example.js"
   },
   "author": {
     "name": "David Beale",

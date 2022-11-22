@@ -2,18 +2,19 @@ const finishSymbol = Symbol('end');
 
 export default function mutationIterator(targetObj = {}) {
   let change;
-  let emit = () => null;
+  let emitChange = () => null;
 
   function watch() {
     change = new Promise((resolve) => {
-      emit = resolve;
+      emitChange = resolve;
     });
   }
 
   const result = new Proxy(targetObj, {
     set(target, prop, value) {
       target[prop] = value; // eslint-disable-line no-param-reassign
-      emit();
+      emitChange(true);
+      watch();
       return true;
     },
 
@@ -21,15 +22,15 @@ export default function mutationIterator(targetObj = {}) {
       if (prop === Symbol.asyncIterator) {
         return async function* iterator() {
           while (true) {
-            if (await change) return; // eslint-disable-line no-await-in-loop
-            watch();
+            const shouldTerminate = !await change; // eslint-disable-line no-await-in-loop
+            if (shouldTerminate) return target;
             yield target;
           }
         };
       }
 
       if (prop === finishSymbol) {
-        return () => emit(true);
+        return () => emitChange(false);
       }
 
       return target[prop];

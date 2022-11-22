@@ -15,8 +15,9 @@ import mutationIterator from 'mutation-iterator';
 const obj = mutationIterator();
 
 
+
 for await ( { name } of obj ) {
-  console.log(name)
+  console.log(name);
 }
 
 ```

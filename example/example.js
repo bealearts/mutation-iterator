@@ -1,9 +1,17 @@
-import mutationIterator from '../src/mutation-iterator.js';
+import mutationIterator, { finish } from '../src/mutation-iterator.js';
 
 const obj = mutationIterator();
 
+obj.someProp = 'Initial...';
 
+setTimeout(() => {
+  obj.someProp = 'Hello'
 
-for await ( { name } of obj ) {
-  console.log(name);
+  finish(obj);
+}, 100);
+
+for await ( const { someProp } of obj ) {
+  console.log(someProp);
 }
+
+console.log('Finished');

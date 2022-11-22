@@ -10,7 +10,7 @@ test('Allows setting props', async () => {
   });
 });
 
-test('Yields the initial object', async () => {
+test('Does not yields the initial object', async () => {
   const obj = mutationIterator();
   obj.name = 'test';
 
@@ -23,7 +23,7 @@ test('Yields the initial object', async () => {
     last = name;
   }
 
-  expect(last).toEqual('test');
+  expect(last).toEqual(undefined);
 });
 
 test('Yields a mutated object', async () => {
@@ -43,7 +43,7 @@ test('Yields a mutated object', async () => {
   }
 
   expect(last).toEqual('change');
-  expect(count).toEqual(2);
+  expect(count).toEqual(1);
 });
 
 test('Batches changes', async () => {
@@ -65,7 +65,7 @@ test('Batches changes', async () => {
   }
 
   expect(last).toEqual('changed again');
-  expect(count).toEqual(2);
+  expect(count).toEqual(1);
 });
 
 test('Extends a target object', async () => {
@@ -73,10 +73,11 @@ test('Extends a target object', async () => {
     existing: 10
   };
   const obj = mutationIterator(target);
-  obj.existing += 1;
 
   setTimeout(() => {
-    finish(obj);
+    obj.existing += 1;
+
+    Promise.resolve().then(() => finish(obj));
   }, 100);
 
   let last;
@@ -108,5 +109,5 @@ test('Yields a mutated nested object', async () => {
   expect(last).toEqual({
     name: 'change'
   });
-  expect(count).toEqual(2);
+  expect(count).toEqual(1);
 });
