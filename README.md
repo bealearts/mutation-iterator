@@ -1,6 +1,6 @@
 # mutation-iterator
 
-Creates an object which is a an async iterator which yields when any of its properties are mutated
+Creates an object which is an async iterator which yields when any of its properties are mutated
 
 # Install
 ```shell
