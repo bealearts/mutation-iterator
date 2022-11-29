@@ -14,6 +14,10 @@
     "name": "David Beale",
     "url": "http://bealearts.co.uk/"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bealearts/mutation-iterator.git"
+  },
   "license": "MIT",
   "devDependencies": {
     "@vitest/coverage-c8": "^0.25.2",
