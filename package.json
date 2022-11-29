@@ -1,6 +1,6 @@
 {
   "name": "mutation-iterator",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Creates an object which is a an async iterator which yields when any of its properties are mutated",
   "main": "src/mutation-iterator.js",
   "type": "module",
