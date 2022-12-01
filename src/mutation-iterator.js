@@ -18,7 +18,7 @@ export default function mutationIterator(targetObj = {}) {
       return true;
     },
 
-    get(target, prop) {
+    get(target, prop, receiver) {
       if (prop === Symbol.asyncIterator) {
         return async function* iterator() {
           while (true) {
@@ -33,7 +33,7 @@ export default function mutationIterator(targetObj = {}) {
         return () => emitChange(false);
       }
 
-      return target[prop];
+      return Reflect.get(target, prop, receiver);
     }
   });
 
