@@ -1,6 +1,6 @@
 const finishSymbol = Symbol('end');
 
-export default function mutationIterator(targetObj = {}) {
+export default function mutationIterator(targetObj = {}, options = { yieldInit: false }) {
   let watcher;
   let emitChange = () => null;
 
@@ -21,6 +21,7 @@ export default function mutationIterator(targetObj = {}) {
     get(target, prop, receiver) {
       if (prop === Symbol.asyncIterator) {
         return async function* iterator() {
+          if (options.yieldInit) yield target;
           while (true) {
             const shouldTerminate = !await watcher; // eslint-disable-line no-await-in-loop
             if (shouldTerminate) return target;

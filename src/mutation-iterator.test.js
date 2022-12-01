@@ -10,7 +10,7 @@ test('Allows setting props', async () => {
   });
 });
 
-test('Does not yields the initial object', async () => {
+test('Does not yield the initial object', async () => {
   const obj = mutationIterator();
   obj.name = 'test';
 
@@ -24,6 +24,22 @@ test('Does not yields the initial object', async () => {
   }
 
   expect(last).toEqual(undefined);
+});
+
+test('Does yield the initial object', async () => {
+  const obj = mutationIterator(undefined, { yieldInit: true });
+  obj.name = 'test';
+
+  setTimeout(() => {
+    finish(obj);
+  }, 100);
+
+  let last;
+  for await (const { name } of obj) {
+    last = name;
+  }
+
+  expect(last).toEqual('test');
 });
 
 test('Yields a mutated object', async () => {
