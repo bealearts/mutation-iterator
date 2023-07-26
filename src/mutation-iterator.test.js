@@ -62,6 +62,31 @@ test('Yields a mutated object', async () => {
   expect(count).toEqual(1);
 });
 
+test('Yields an object through emitter', async () => {
+  let emit;
+  const obj = mutationIterator(undefined, {
+    receiveEmitter: (emitter) => {
+      emit = emitter;
+    }
+  });
+  obj.name = 'test';
+
+  setTimeout(() => {
+    emit();
+    Promise.resolve().then(() => finish(obj));
+  }, 100);
+
+  let last;
+  let count = 0;
+  for await (const { name } of obj) {
+    last = name;
+    count++;
+  }
+
+  expect(last).toEqual('test');
+  expect(count).toEqual(1);
+});
+
 test('Batches changes', async () => {
   const obj = mutationIterator();
   obj.name = 'test';
